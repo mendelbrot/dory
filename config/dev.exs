@@ -58,7 +58,10 @@ config :dory, DoryWeb.Endpoint,
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/dory_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"lib/dory_web/(controllers|live|components)/.*(ex|heex)$",
+      ~r"lib/dory_web/auth/(controllers|live|components)/.*(ex|heex)$",
+      ~r"lib/dory_web/forum/(controllers|live|components)/.*(ex|heex)$",
+      ~r"lib/dory_web/main/(controllers|live|components)/.*(ex|heex)$"
     ]
   ]
 

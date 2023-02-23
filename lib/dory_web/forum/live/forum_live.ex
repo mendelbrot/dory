@@ -29,7 +29,7 @@ defmodule DoryWeb.ForumLive do
 
   def render(assigns) do
     ~H"""
-    <h1>Forum 1233</h1>
+    <h1>Forum</h1>
     <div>
       <ul>
         <li :for={m <- @messages}>
