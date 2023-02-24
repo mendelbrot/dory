@@ -28,6 +28,8 @@ defmodule DoryWeb.ForumLive do
     {:ok, socket}
   end
 
+  attr :posts, :list
+
   def render(assigns) do
     ~H"""
     <h1 class="text-blue-500 text-2xl font-bold mb-3 pb-3 border-b-2 outline-2">Forum</h1>
@@ -44,59 +46,75 @@ defmodule DoryWeb.ForumLive do
       </div>
       <div class="p-3 outline outline-1">
         <ul data-hdl="posts">
-          <li :for={m <- @posts}>
-            <div data-hdl="post" class="flex flex-row">
-              <div data-hdl="left" class="basis-1/6">
-                <div data-hdl="icon" class="border-2 rounded mt-3 p-3">img</div>
-              </div>
-              <div data-hdl="right" class="basis-5/6 border-2 rounded m-3 p-3">
-                <div data-hdl="top" class="flex flex-row">
-                  <div data-hdl="username">
-                    <%= m.username %>
-                  </div>
-                  <div data-hdl="time">
-                    <%= m.created_at %>
-                  </div>
-                </div>
-                <div ata-hdl="body" class="border-y-2 my-3 py-3">
-                  <%= m.body %>
-                </div>
-                <div ata-hdl="bottom" class="flex flex-row">
-                  <div ata-hdl="icons" class="flex flex-row">
-                    <div data-hdl="icon">img</div>
-                    <div data-hdl="icon">img</div>
-                  </div>
-                  <div ata-hdl="replies">10 replies</div>
-                  <div ata-hdl="last-reply">last reply today</div>
-                </div>
-              </div>
-            </div>
+          <li :for={p <- @posts}>
+            <.post post={p} />
           </li>
         </ul>
       </div>
       <div class="p-3 outline outline-1">
         <ul data-hdl="thread">
-          <li :for={m <- @posts}>
-            <div data-hdl="post" class="flex flex-row">
-              <div data-hdl="left" class="basis-1/6">
-                <div data-hdl="icon" class="border-2 rounded mt-3 p-3">img</div>
-              </div>
-              <div data-hdl="right" class="basis-5/6 border-2 rounded m-3 p-3">
-                <div data-hdl="top" class="flex flex-row">
-                  <div data-hdl="username">
-                    <%= m.username %>
-                  </div>
-                  <div data-hdl="time">
-                    <%= m.created_at %>
-                  </div>
-                </div>
-                <div ata-hdl="body" class="border-t-2 mt-3 pt-3">
-                  <%= m.body %>
-                </div>
-              </div>
-            </div>
+          <li :for={p <- @posts}>
+            <.thread_post post={p} />
           </li>
         </ul>
+      </div>
+    </div>
+    """
+  end
+
+  attr :post, :map
+
+  def post(assigns) do
+    ~H"""
+    <div data-hdl="post" class="flex flex-row">
+      <div data-hdl="left" class="basis-1/6">
+        <div data-hdl="icon" class="border-2 rounded mt-3 p-3">img</div>
+      </div>
+      <div data-hdl="right" class="basis-5/6 border-2 rounded m-3 p-3">
+        <div data-hdl="top" class="flex flex-row">
+          <div data-hdl="username">
+            <%= @post.username %>
+          </div>
+          <div data-hdl="time">
+            <%= @post.created_at %>
+          </div>
+        </div>
+        <div ata-hdl="body" class="border-y-2 my-3 py-3">
+          <%= @post.body %>
+        </div>
+        <div ata-hdl="bottom" class="flex flex-row">
+          <div ata-hdl="icons" class="flex flex-row">
+            <div data-hdl="icon">img</div>
+            <div data-hdl="icon">img</div>
+          </div>
+          <div ata-hdl="replies">10 replies</div>
+          <div ata-hdl="last-reply">last reply today</div>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  attr :post, :map
+
+  def thread_post(assigns) do
+    ~H"""
+    <div data-hdl="post" class="flex flex-row">
+      <div data-hdl="left" class="basis-1/6">
+        <div data-hdl="icon" class="border-2 rounded mt-3 p-3">img</div>
+      </div>
+      <div data-hdl="right" class="basis-5/6 border-2 rounded m-3 p-3">
+        <div data-hdl="top" class="flex flex-row">
+          <div data-hdl="username">
+            <%= @post.username %>
+          </div>
+          <div data-hdl="time">
+            <%= @post.created_at %>
+          </div>
+        </div>
+        <div ata-hdl="body" class="border-t-2 mt-3 pt-3">
+          <%= @post.body %>
+        </div>
       </div>
     </div>
     """
