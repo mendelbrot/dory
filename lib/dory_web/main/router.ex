@@ -21,7 +21,7 @@ defmodule DoryWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-    live "/forum", ForumLive
+    live "/forum/:forum_id", ForumLive
   end
 
   # Other scopes may use custom stacks.
