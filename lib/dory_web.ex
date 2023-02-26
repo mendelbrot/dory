@@ -54,6 +54,7 @@ defmodule DoryWeb do
       use Phoenix.LiveView,
         layout: {DoryWeb.Layouts, :app}
 
+      import Surface
       unquote(html_helpers())
     end
   end

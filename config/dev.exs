@@ -54,14 +54,15 @@ config :dory, DoryWeb.Endpoint,
 
 # Watch static and templates for browser reloading.
 config :dory, DoryWeb.Endpoint,
+  reloadable_compilers: [:gettext, :elixir, :app, :surface],
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/dory_web/(controllers|live|components)/.*(ex|heex)$",
-      ~r"lib/dory_web/auth/(controllers|live|components)/.*(ex|heex)$",
-      ~r"lib/dory_web/forum/(controllers|live|components)/.*(ex|heex)$",
-      ~r"lib/dory_web/main/(controllers|live|components)/.*(ex|heex)$"
+      ~r"lib/dory_web/(controllers|live|components)/.*(ex|heex|sface|js)$",
+      ~r"lib/dory_web/auth/(controllers|live|components)/.*(ex|heex|sface|js)$",
+      ~r"lib/dory_web/forum/(controllers|live|components)/.*(ex|heex|sface|js)$",
+      ~r"lib/dory_web/main/(controllers|live|components)/.*(ex|heex|sface|js)$"
     ]
   ]
 
