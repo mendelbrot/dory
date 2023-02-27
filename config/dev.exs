@@ -60,10 +60,7 @@ config :dory, DoryWeb.Endpoint,
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/dory_web/(controllers|live|components)/.*(ex|heex|sface|js)$",
-      ~r"lib/dory_web/auth/(controllers|live|components)/.*(ex|heex|sface|js)$",
-      ~r"lib/dory_web/forum/(controllers|live|components)/.*(ex|heex|sface|js)$",
-      ~r"lib/dory_web/main/(controllers|live|components)/.*(ex|heex|sface|js)$",
-      ~r"lib/dory_web/profile/(controllers|live|components)/.*(ex|heex|sface|js)$"
+      ~r"lib/dory_web/(auth|forum|main|profile|ui)/(controllers|live|components)/.*(ex|heex|sface|js)$"
     ]
   ]
 
