@@ -62,7 +62,8 @@ config :dory, DoryWeb.Endpoint,
       ~r"lib/dory_web/(controllers|live|components)/.*(ex|heex|sface|js)$",
       ~r"lib/dory_web/auth/(controllers|live|components)/.*(ex|heex|sface|js)$",
       ~r"lib/dory_web/forum/(controllers|live|components)/.*(ex|heex|sface|js)$",
-      ~r"lib/dory_web/main/(controllers|live|components)/.*(ex|heex|sface|js)$"
+      ~r"lib/dory_web/main/(controllers|live|components)/.*(ex|heex|sface|js)$",
+      ~r"lib/dory_web/profile/(controllers|live|components)/.*(ex|heex|sface|js)$"
     ]
   ]
 

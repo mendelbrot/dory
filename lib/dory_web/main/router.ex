@@ -22,6 +22,7 @@ defmodule DoryWeb.Router do
 
     get "/", PageController, :home
     live "/forum/:forum_id", ForumLive
+    live "/profile", ProfileLive
   end
 
   # Other scopes may use custom stacks.

@@ -6,11 +6,14 @@ defmodule Forum.ThreadPost do
 
   def render(assigns) do
     ~F"""
-    <div data-hdl="post" class={if(@highlight, do: "bg-yellow-200", else: "") <> " flex flex-row"}>
+    <div
+      data-hdl="post"
+      class={if(@highlight, do: "bg-yellow-200", else: "") <> " flex flex-row p-3"}
+    >
       <div data-hdl="left" class="basis-1/6">
-        <div data-hdl="icon" class="border-2 rounded m-3 p-3">img</div>
+        <Profile.Icon src="https://cdn-icons-png.flaticon.com/128/3069/3069186.png" />
       </div>
-      <div data-hdl="right" class="basis-5/6 border-2 rounded m-3 p-3 bg-purple-200">
+      <div data-hdl="right" class="basis-5/6 border-2 rounded ml-3 p-3 bg-purple-200">
         <div data-hdl="top" class="flex flex-row">
           <div data-hdl="username">
             {@post.username}

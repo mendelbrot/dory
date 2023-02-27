@@ -7,15 +7,15 @@ defmodule Forum.Post do
     ~F"""
     <div
       data-hdl="post"
-      class="flex flex-row"
+      class="flex flex-row p-3"
       phx-click="select-post"
       phx-value-id={@post.id}
       phx-value-ref_post_id={@post.ref_post_id}
     >
       <div data-hdl="left" class="basis-1/6">
-        <div data-hdl="icon" class="border-2 rounded m-3 p-3">img</div>
+        <Profile.Icon src="https://cdn-icons-png.flaticon.com/128/3069/3069186.png" />
       </div>
-      <div data-hdl="right" class="basis-5/6 border-2 rounded m-3 p-3">
+      <div data-hdl="right" class="basis-5/6 border-2 rounded ml-3 p-3">
         <div data-hdl="top" class="flex flex-row">
           <div data-hdl="username">
             {@post.username}
