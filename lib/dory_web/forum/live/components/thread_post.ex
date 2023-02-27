@@ -1,4 +1,4 @@
-defmodule ThreadPost do
+defmodule Forum.ThreadPost do
   use Surface.Component
 
   prop post, :map, required: true
@@ -8,7 +8,7 @@ defmodule ThreadPost do
     ~F"""
     <div data-hdl="post" class={if(@highlight, do: "bg-yellow-200", else: "") <> " flex flex-row"}>
       <div data-hdl="left" class="basis-1/6">
-        <div data-hdl="icon" class="border-2 rounded mt-3 p-3">img</div>
+        <div data-hdl="icon" class="border-2 rounded m-3 p-3">img</div>
       </div>
       <div data-hdl="right" class="basis-5/6 border-2 rounded m-3 p-3 bg-purple-200">
         <div data-hdl="top" class="flex flex-row">

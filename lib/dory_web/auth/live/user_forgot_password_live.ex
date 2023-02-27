@@ -1,6 +1,5 @@
 defmodule DoryWeb.UserForgotPasswordLive do
   use DoryWeb, :live_view
-
   alias Dory.Accounts
 
   def render(assigns) do

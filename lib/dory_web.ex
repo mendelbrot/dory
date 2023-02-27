@@ -62,6 +62,8 @@ defmodule DoryWeb do
     quote do
       use Surface.LiveView,
         layout: {DoryWeb.Layouts, :app}
+
+      unquote(html_helpers())
     end
   end
 

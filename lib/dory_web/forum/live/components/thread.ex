@@ -1,9 +1,11 @@
-defmodule Thread do
-  use Surface.Component
+defmodule Forum.Thread do
+  use Surface.LiveComponent
 
   prop selected_post, :map, required: true
 
-  def render(assigns) do
+  data posts, :list
+
+  def mount(socket) do
     # get the posts in the thread
 
     posts = [
@@ -43,10 +45,11 @@ defmodule Thread do
       }
     ]
 
-    assigns = assign(assigns, posts: posts)
+    socket = assign(socket, posts: posts)
+    {:ok, socket}
+  end
 
-    # prop posts, :list, default: nil
-
+  def render(assigns) do
     ~F"""
     <div>
       <div class="p-3 outline outline-1">
@@ -64,7 +67,7 @@ defmodule Thread do
         <ul data-hdl="thread">
           {#for p <- @posts}
             <li>
-              <ThreadPost post={p} highlight={p.id == @selected_post["id"]} />
+              <Forum.ThreadPost post={p} highlight={p.id == @selected_post["id"]} />
             </li>
           {/for}
         </ul>

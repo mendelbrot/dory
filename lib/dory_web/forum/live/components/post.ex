@@ -1,4 +1,4 @@
-defmodule Post do
+defmodule Forum.Post do
   use Surface.Component
 
   prop post, :map, required: true
@@ -13,7 +13,7 @@ defmodule Post do
       phx-value-ref_post_id={@post.ref_post_id}
     >
       <div data-hdl="left" class="basis-1/6">
-        <div data-hdl="icon" class="border-2 rounded mt-3 p-3">img</div>
+        <div data-hdl="icon" class="border-2 rounded m-3 p-3">img</div>
       </div>
       <div data-hdl="right" class="basis-5/6 border-2 rounded m-3 p-3">
         <div data-hdl="top" class="flex flex-row">

@@ -79,14 +79,14 @@ defmodule DoryWeb.ForumLive do
           <ul data-hdl="posts">
             {#for p <- @main_feed}
               <li>
-                <Post post={p} />
+                <Forum.Post post={p} />
               </li>
             {/for}
           </ul>
         </div>
       </div>
       {#if @selected_post}
-        <Thread selected_post={@selected_post} />
+        <Forum.Thread id="forum-thread" selected_post={@selected_post} />
       {/if}
     </div>
     """
