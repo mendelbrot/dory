@@ -53,7 +53,8 @@ defmodule Dory.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:surface, "~> 0.9.4"}
+      {:surface, "~> 0.9.4"},
+      {:tails, git: "https://github.com/zachdaniel/tails.git", tag: "v0.1.3"}
     ]
   end
 
