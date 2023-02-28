@@ -1,8 +1,7 @@
 defmodule DoryWeb.ProfileLive do
   use DoryWeb, :surface_live_view
-  alias Surface.Components.Link.Button
-  alias Surface.Components.Form.{TextInput, TextArea}
-  alias Surface.Components.Link.Button
+  alias Surface.Components.Form.TextInput
+  import Tails
 
   def mount(_params, _session, socket) do
     profile_icons = [
@@ -48,27 +47,35 @@ defmodule DoryWeb.ProfileLive do
     <TextInput
       value="hello!!!"
       keyup="username-keyup"
-      class={if(@username_state == :available, do: "bg-green-300 ", else: "") <> "w-96 rounded-xl"}
+      class={classes(
+        "bg-green-200 ": @username_state == :available,
+        "bg-red-200 ": @username_state == :taken,
+        "w-96 rounded-xl": true
+      )}
     />
     <h2 class="text-green-500 text-xl font-bold mb-1 pb-1" , "text-yellow-500">
       Profile Icon
     </h2>
+    <div />
     <div>{@selected_icon}</div>
     <div class="grid grid-cols-4 gap-4">
       {#for icon <- @profile_icons}
         <button
           phx-click="select-icon"
           phx-value-icon={icon}
-          class={if(icon == @selected_icon,
-            do: "outline outline-4 outline-blue-500",
-            else: "hover:outline hover:outline-4 hover: outline-orange-400"
-          ) <> " w-16 rounded-xl"}
+          class={classes(
+            "outline outline-4 outline-blue-500": icon == @selected_icon,
+            "hover:outline hover:outline-4 hover: outline-orange-400": icon != @selected_icon,
+            " w-16 rounded-xl": true
+          )}
         >
           <Profile.Icon src={icon} />
         </button>
       {/for}
     </div>
-    <UI.Button disabled={!can_submit}>Save</UI.Button>
+    <div phx-click="save">
+      <UI.Button disabled={!can_submit} class="bg-fuchsia-400 hover:bg-fuchsia-600 my-3">Save</UI.Button>
+    </div>
     """
   end
 
@@ -85,5 +92,10 @@ defmodule DoryWeb.ProfileLive do
       socket = assign(socket, username_state: :available)
       {:noreply, socket}
     end
+  end
+
+  def handle_event("save", value, socket) do
+    IO.inspect(value)
+    {:noreply, socket}
   end
 end
