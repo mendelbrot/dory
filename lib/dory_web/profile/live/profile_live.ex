@@ -73,9 +73,13 @@ defmodule DoryWeb.ProfileLive do
         </button>
       {/for}
     </div>
-    <div phx-click="save">
-      <UI.Button disabled={!can_submit} class="bg-fuchsia-400 hover:bg-fuchsia-600 my-3">Save</UI.Button>
-    </div>
+    <UI.Button
+      on_click="save"
+      disabled={!can_submit}
+      class="bg-fuchsia-400 hover:bg-fuchsia-600 my-3"
+    >
+      Save
+    </UI.Button>
     """
   end
 
@@ -94,8 +98,7 @@ defmodule DoryWeb.ProfileLive do
     end
   end
 
-  def handle_event("save", value, socket) do
-    IO.inspect(value)
+  def handle_event("save", _value, socket) do
     {:noreply, socket}
   end
 end
