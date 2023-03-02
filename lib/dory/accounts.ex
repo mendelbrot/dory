@@ -6,7 +6,40 @@ defmodule Dory.Accounts do
   import Ecto.Query, warn: false
   alias Dory.Repo
 
-  alias Dory.Accounts.{User, UserToken, UserNotifier}
+  alias Dory.Accounts.{Profile, User, UserToken, UserNotifier}
+
+  ## User Profiles
+
+  @doc """
+  creates the user profile
+
+  example:
+  ```
+  import Dory.Accounts
+  alias Dory.Accounts.Profile
+  create_profile(%{user_id: 1, username: "Cylon Pylon"})
+  ```
+  """
+  def create_profile(attrs) do
+    %Profile{}
+    |> Profile.create_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  updates the user profile
+
+  example:
+  ```
+  import Dory.Accounts
+  update_profile(%Profile{id: 1}, %{id: 1, username: "Cylon Smile On"})
+  ```
+  """
+  def update_profile(profile, attrs) do
+    profile
+    |> Profile.update_changeset(attrs)
+    |> Repo.update()
+  end
 
   ## Database getters
 
