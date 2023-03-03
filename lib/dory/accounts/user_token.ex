@@ -1,5 +1,5 @@
 defmodule Dory.Accounts.UserToken do
-  use Ecto.Schema
+  use Dory.Schema
   import Ecto.Query
   alias Dory.Accounts.UserToken
 

@@ -1,5 +1,5 @@
 defmodule Dory.Accounts.Profile do
-  use Ecto.Schema
+  use Dory.Schema
   import Ecto.Changeset
   alias Dory.Accounts.User
 
