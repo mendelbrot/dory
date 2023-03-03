@@ -6,6 +6,8 @@ defmodule DoryWeb.UserAuth do
 
   alias Dory.Accounts
 
+  require Logger
+
   # Make the remember me cookie valid for 60 days.
   # If you want bump or reduce this value, also change
   # the token expiry itself in UserToken.
@@ -214,6 +216,18 @@ defmodule DoryWeb.UserAuth do
       |> halt()
     end
   end
+
+  # def require_user_to_have_profile(conn, _opts) do
+  #   if conn.assigns[:profile] do
+  #     conn
+  #   else
+  #     conn
+  #     |> put_flash(:info, "Please make a profile.")
+  #     |> maybe_store_return_to()
+  #     |> redirect(to: ~p"/users/log_in")
+  #     |> halt()
+  #   end
+  # end
 
   defp put_token_in_session(conn, token) do
     conn

@@ -24,5 +24,6 @@
     "phoenix-sface": "html",
     "elixir": "html"
   },
-  "cSpell.words": ["citext", "heex", "liveview", "noreply"]
+  "cSpell.words": ["citext", "heex", "liveview", "noreply"],
+  "elixirLS.suggestSpecs": false
 }

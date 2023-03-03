@@ -16,8 +16,7 @@ defmodule Dory.Accounts do
   example:
   ```
   import Dory.Accounts
-  alias Dory.Accounts.Profile
-  create_profile(%{user_id: 1, username: "Cylon Pylon"})
+  create_profile(%{user_id: "some uuid", username: "Cylon Pylon"})
   ```
   """
   def create_profile(attrs) do
@@ -32,10 +31,11 @@ defmodule Dory.Accounts do
   example:
   ```
   import Dory.Accounts
-  update_profile(%Profile{id: 1}, %{id: 1, username: "Cylon Smile On"})
+  alias Dory.Accounts.Profile
+  update_profile(%Profile{id: "some uuid"}, %{username: "Cylon Smile On"})
   ```
   """
-  def update_profile(profile, attrs) do
+  def update_profile(%Profile{} = profile, attrs) do
     profile
     |> Profile.update_changeset(attrs)
     |> Repo.update()
@@ -56,7 +56,9 @@ defmodule Dory.Accounts do
 
   """
   def get_user_by_email(email) when is_binary(email) do
-    Repo.get_by(User, email: email)
+    User
+    |> preload(:profile)
+    |> Repo.get_by(email: email)
   end
 
   @doc """
@@ -73,7 +75,11 @@ defmodule Dory.Accounts do
   """
   def get_user_by_email_and_password(email, password)
       when is_binary(email) and is_binary(password) do
-    user = Repo.get_by(User, email: email)
+    user =
+      User
+      |> preload(:profile)
+      |> Repo.get_by(email: email)
+
     if User.valid_password?(user, password), do: user
   end
 
@@ -91,7 +97,11 @@ defmodule Dory.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id) do
+    User
+    |> preload(:profile)
+    |> Repo.get!(id)
+  end
 
   ## User registration
 
@@ -260,11 +270,17 @@ defmodule Dory.Accounts do
   end
 
   @doc """
+  >> it is from this function that the user data is added to conn. <<
+
   Gets the user with the given signed token.
+
+  secondly, gets the profile info and loads it to the user, so that this info is available in conn.
+  had to do a second trip to get the profile because of difficulty putting the preload into the query.
   """
   def get_user_by_session_token(token) do
     {:ok, query} = UserToken.verify_session_token_query(token)
-    Repo.one(query)
+    user = Repo.one(query)
+    user && Repo.preload(user, :profile)
   end
 
   @doc """
