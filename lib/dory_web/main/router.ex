@@ -18,11 +18,10 @@ defmodule DoryWeb.Router do
   end
 
   scope "/", DoryWeb do
-    pipe_through :browser
+    pipe_through [:browser, :require_authenticated_user, :require_user_to_have_profile]
 
     get "/", PageController, :home
     live "/forum/:forum_id", ForumLive
-    live "/profile", ProfileLive
   end
 
   # Other scopes may use custom stacks.
@@ -70,6 +69,7 @@ defmodule DoryWeb.Router do
       on_mount: [{DoryWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+      live "/profile", ProfileLive
     end
   end
 

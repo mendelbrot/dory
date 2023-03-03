@@ -217,17 +217,21 @@ defmodule DoryWeb.UserAuth do
     end
   end
 
-  # def require_user_to_have_profile(conn, _opts) do
-  #   if conn.assigns[:profile] do
-  #     conn
-  #   else
-  #     conn
-  #     |> put_flash(:info, "Please make a profile.")
-  #     |> maybe_store_return_to()
-  #     |> redirect(to: ~p"/users/log_in")
-  #     |> halt()
-  #   end
-  # end
+  @doc """
+  redirects to the profile page if the conn has a user without a profile.
+
+  if there is no user it does nothing.
+  (the no-user case is handled separately by piping through require_authenticated_user.)
+  """
+  def require_user_to_have_profile(%{assigns: %{current_user: %{profile: nil}}} = conn, _opts) do
+    conn
+    |> put_flash(:info, "Please make a profile first.")
+    |> maybe_store_return_to()
+    |> redirect(to: ~p"/profile")
+    |> halt()
+  end
+
+  def require_user_to_have_profile(conn, _opts), do: conn
 
   defp put_token_in_session(conn, token) do
     conn
