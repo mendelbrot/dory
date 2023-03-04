@@ -44,6 +44,29 @@ defmodule Dory.Accounts do
   ## Database getters
 
   @doc """
+  gets the profile with the given username
+  """
+  def profile_by_username(username) do
+    Profile
+    |> Repo.get_by(username: username)
+  end
+
+  @doc """
+  gets a user by username
+  """
+  def get_user_by_username(username) do
+    query =
+      from u in User,
+        join: p in Profile,
+        on: p.user_id == u.id,
+        where: p.username == ^username,
+        preload: [:profile],
+        select: u
+
+    Repo.one(query)
+  end
+
+  @doc """
   Gets a user by email.
 
   ## Examples

@@ -20,7 +20,7 @@ defmodule DoryWeb.Router do
   scope "/", DoryWeb do
     pipe_through [:browser, :require_authenticated_user, :require_user_to_have_profile]
 
-    get "/", PageController, :home
+    live "/", HomepageLive
     live "/forum/:forum_id", ForumLive
   end
 
