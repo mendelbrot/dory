@@ -22,7 +22,7 @@ defmodule DoryWeb.HomepageLive do
       +
     </UI.Button>
     {#if @new_forum}
-      <div class="border-y-2">
+      <div class="border-y-2 my-3 py-3">
         <Homepage.NewForum id="new-forum" user={@current_user} />
       </div>
     {/if}

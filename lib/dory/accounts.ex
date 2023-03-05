@@ -5,7 +5,6 @@ defmodule Dory.Accounts do
 
   import Ecto.Query, warn: false
   alias Dory.Repo
-
   alias Dory.Accounts.{Profile, User, UserToken, UserNotifier}
 
   ## User Profiles

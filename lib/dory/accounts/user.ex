@@ -2,6 +2,7 @@ defmodule Dory.Accounts.User do
   use Dory.Schema
   import Ecto.Changeset
   alias Dory.Accounts.Profile
+  alias Dory.Forums.{Forum}
 
   schema "users" do
     field :email, :string
@@ -9,6 +10,7 @@ defmodule Dory.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
     has_one :profile, Profile
+    many_to_many :forums, Forum, join_through: "forum_users"
     timestamps()
   end
 

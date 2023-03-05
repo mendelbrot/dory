@@ -41,6 +41,14 @@ defmodule Homepage.NewForum do
           "w-96 rounded-xl": true
         )}
       />
+      <div class="flex flex-row">
+        <UI.Button on_click="new-forum-false" class="mt-3 mr-3">
+          Create
+        </UI.Button>
+        <UI.Button on_click="new-forum-create" class="mt-3">
+          Cancel
+        </UI.Button>
+      </div>
     </div>
     """
   end

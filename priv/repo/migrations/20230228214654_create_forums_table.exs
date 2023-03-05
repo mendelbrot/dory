@@ -17,7 +17,8 @@ defmodule Dory.Repo.Migrations.CreateForumsTable do
       timestamps(updated_at: false)
     end
 
-    create unique_index(:forum_users, [:forum_id])
-    create unique_index(:forum_users, [:user_id])
+    create index(:forum_users, [:forum_id])
+    create index(:forum_users, [:user_id])
+    create unique_index(:forum_users, [:forum_id, :forum_id])
   end
 end
