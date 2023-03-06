@@ -23,7 +23,9 @@ defmodule UI.Button do
 
   prop id, :string
   prop disabled, :boolean, default: false
+  prop value, :string, default: false
   prop on_click, :string
+  prop target, :string
   prop class, :string, default: ""
 
   slot default
@@ -33,7 +35,9 @@ defmodule UI.Button do
     <button
       {=@id}
       {=@disabled}
+      {=@value}
       phx-click={@on_click}
+      phx-target={@target}
       class={classes([
         "bg-blue-400 text-white font-bold py-2 px-4 rounded-xl",
         [

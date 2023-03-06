@@ -1,13 +1,14 @@
 defmodule DoryWeb.HomepageLive do
   use DoryWeb, :surface_live_view
   import Tails, warn: false
+  alias Surface.Components.Link
 
   def mount(_params, _session, socket) do
     socket =
       assign(socket,
         new_forum: false,
         username: socket.assigns.current_user.profile.username,
-        forums: []
+        forums: Dory.Forums.get_my(socket.assigns.current_user.id)
       )
 
     {:ok, socket}
@@ -18,7 +19,7 @@ defmodule DoryWeb.HomepageLive do
     <h1 class="text-blue-500 text-2xl font-bold mb-3 pb-3 border-b-2">
       {@username} - Home
     </h1>
-    <UI.Button on_click="new-forum-true">
+    <UI.Button on_click="new-true">
       +
     </UI.Button>
     {#if @new_forum}
@@ -27,26 +28,22 @@ defmodule DoryWeb.HomepageLive do
       </div>
     {/if}
 
-    <div class="grid grid-cols-4 gap-4">
+    <div>
       {#for forum <- @forums}
-        <button
-          phx-click="goto-forum"
-          phx-value-forum={forum.id}
-          class="rounded-xl hover:outline hover:outline-4 hover: outline-orange-400"
-        >
-          forum.name
-        </button>
+        <div class="border-2 rounded-xl my-3 w-fit hover:bg-slate-300">
+          <Link to={~p"/forum/#{forum.id}"} class="text-cyan-700 text-lg p-3">{forum.name}</Link>
+        </div>
       {/for}
     </div>
     """
   end
 
-  def handle_event("new-forum-true", _value, socket) do
+  def handle_event("new-true", _value, socket) do
     socket = assign(socket, new_forum: true)
     {:noreply, socket}
   end
 
-  def handle_event("new-forum-false", _value, socket) do
+  def handle_event("new-false", _value, socket) do
     socket = assign(socket, new_forum: false)
     {:noreply, socket}
   end

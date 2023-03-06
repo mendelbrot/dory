@@ -1,47 +1,80 @@
 defmodule Dory.Forums do
   import Ecto.Query, warn: false
   alias Dory.Repo
+  alias Dory.Accounts.User
   alias Dory.Forums.{Forum, ForumUser}
 
-  def create_forum(attrs, forum_user_ids) do
+  def create(attrs, forum_user_ids \\ []) do
     forum_users =
       forum_user_ids
       |> Enum.map(fn id -> %ForumUser{user_id: id} end)
 
     %Forum{}
-    |> Profile.create_changeset(attrs, forum_users)
+    |> Forum.create_changeset(attrs, forum_users)
     |> Repo.insert()
   end
 
-  def update_forum(%Forum{} = forum, attrs, current_user_id) do
+  def update(%Forum{} = forum, attrs) do
     forum
-    |> Profile.update_changeset(attrs)
+    |> Forum.update_changeset(attrs)
     |> Repo.update()
   end
 
-  def get_forums(id, current_user_id) do
+  def get_my(current_user_id) do
+    query =
+      from f in Forum,
+        join: fu in ForumUser,
+        on: f.id == fu.forum_id,
+        where: fu.user_id == ^current_user_id,
+        select: f
+
+    Repo.all(query)
+  end
+
+  def get(id) do
     Repo.get(Forum, id)
   end
 
-  def get_forum(id, current_user_id) do
-    Repo.get(Forum, id)
+  def get_by_name(name) do
+    Repo.get_by(Forum, name: name)
   end
 
-  def get_forum_by_name(name, current_user_id) do
-    Forum
-    |> Repo.get_by(Forum, name: name)
+  def delete(id) do
+    forum = Repo.get(Forum, id)
+    Repo.delete(forum)
   end
 
-  def delete_forum(id, current_user_id) do
-    Repo.get(Forum, id)
+  def create_user_association(attrs) do
+    %ForumUser{}
+    |> ForumUser.create_changeset(attrs)
+    |> Repo.insert()
   end
 
-  def create_forum_user(%ForumUser{} = forum_user, current_user_id) do
+  def delete_user_association(id) do
+    forum_user = Repo.get(ForumUser, id)
+    Repo.delete(forum_user)
   end
 
-  def get_forum_user(%ForumUser{} = forum_user, current_user_id) do
+  def get_user_associations(forum_id) do
+    query =
+      from fu in ForumUser,
+        where: fu.forum_id == ^forum_id,
+        select: fu
+
+    Repo.all(query)
   end
 
-  def delete_forum_user(id, current_user_id) do
+  def get_associated_users(forum_id) do
+    query =
+      from u in User,
+        join: p in Profile,
+        on: p.user_id == u.id,
+        join: fu in ForumUser,
+        on: u.id == fu.user_id,
+        where: fu.forum_id == ^forum_id,
+        preload: [:profile],
+        select: u
+
+    Repo.all(query)
   end
 end

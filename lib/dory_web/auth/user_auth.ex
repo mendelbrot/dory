@@ -225,7 +225,7 @@ defmodule DoryWeb.UserAuth do
   """
   def require_user_to_have_profile(%{assigns: %{current_user: %{profile: nil}}} = conn, _opts) do
     conn
-    |> put_flash(:info, "Please make a profile first.")
+    |> put_flash(:info, "Please make a profile.")
     |> maybe_store_return_to()
     |> redirect(to: ~p"/profile")
     |> halt()
