@@ -1,5 +1,6 @@
 defmodule Forum.Thread do
   use Surface.LiveComponent
+  alias Surface.Components.Form.TextArea
 
   prop selected_post, :map, required: true
 
@@ -51,8 +52,8 @@ defmodule Forum.Thread do
 
   def render(assigns) do
     ~F"""
-    <div>
-      <div class="p-3 outline outline-1">
+    <div class="bg-white border-r-2 border-blue-400 w-1/2">
+      <div class="p-3 border-y-2 border-blue-400">
         <div data-hdl="thread-header" class="flex flex-row justify-between">
           <h2 class="text-blue-500 text-xl font-bold">Thread</h2>
           <button
@@ -63,14 +64,20 @@ defmodule Forum.Thread do
           </button>
         </div>
       </div>
-      <div class="p-3 outline outline-1">
+      <div class="p-3 border-b-2 border-blue-400 h-96 overflow-scroll">
         <ul data-hdl="thread">
           {#for p <- @posts}
             <li>
-              <Forum.ThreadPost post={p} highlight={p.id == @selected_post["id"]} />
+              <Forum.Post post={p} highlight={p.id == @selected_post["id"]} />
             </li>
           {/for}
         </ul>
+      </div>
+      <div class="p-3 border-b-2 border-r-2 border-blue-400">
+        <TextArea class="w-full" />
+        <div class="flex flex-row justify-end items-end mt-3">
+          <UI.Button>></UI.Button>
+        </div>
       </div>
     </div>
     """

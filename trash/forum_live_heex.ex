@@ -76,7 +76,7 @@
 #       <div>
 #         <div class="p-3 outline outline-1">
 #           <div data-hdl="posts-header">
-#             <h2 class="text-green-500 text-xl font-bold">Posts</h2>
+#             <h2 class="text-green-800 text-xl font-bold">Posts</h2>
 #           </div>
 #         </div>
 #         <div class="p-3 outline outline-1">

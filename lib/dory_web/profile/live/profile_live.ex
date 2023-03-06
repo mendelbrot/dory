@@ -44,12 +44,8 @@ defmodule DoryWeb.ProfileLive do
         assigns.username_state != :taken
 
     ~F"""
-    <h1 class="text-blue-500 text-2xl font-bold mb-3 pb-3 border-b-2">
-      {if @profile, do: "Edit", else: "Create"} Profile
-    </h1>
-    <h2 class="text-green-700 text-xl font-bold mb-1 pb-1">
-      Username
-    </h2>
+    <UI.H1>{if @profile, do: "Edit", else: "Create"} Profile</UI.H1>
+    <UI.H2 class="my-3">Username</UI.H2>
 
     <TextInput
       value={@input_username}
@@ -60,13 +56,12 @@ defmodule DoryWeb.ProfileLive do
         "w-96 rounded-xl": true
       )}
     />
-    <h2 class="text-green-700 text-xl font-bold mb-1 pb-1" , "text-yellow-500">
-      Profile Icon
-    </h2>
+    <UI.H2 class="my-3">Profile Icon</UI.H2>
     <div />
-    <div class="flex flex-row mb-3">
+    <div class="flex flex-row mb-6">
       <Profile.Icon src={@input_icon} />
     </div>
+    <UI.H2 class="my-3">Select Icon</UI.H2>
     <div class="grid grid-cols-4 gap-4">
       {#for icon <- @profile_icons}
         <button

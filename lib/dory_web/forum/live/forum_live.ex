@@ -1,5 +1,6 @@
 defmodule DoryWeb.ForumLive do
   use DoryWeb, :surface_live_view
+  alias Surface.Components.Form.TextArea
 
   def mount(params, _session, socket) do
     _forum_id = params["forum_id"]
@@ -65,26 +66,33 @@ defmodule DoryWeb.ForumLive do
 
   def render(assigns) do
     ~F"""
-    <h1 class="text-blue-500 text-2xl font-bold mb-3 pb-3 border-b-2 outline-2">
-      {@forum_name}
-    </h1>
-    <div class="flex flex-row">
-      <div>
-        <div class="p-3 outline outline-1">
+    <UI.H1>{@forum_name}</UI.H1>
+    <div class="flex flex-row border-l-2 border-blue-400">
+      <div div class="bg-white border-blue-400 w-1/2">
+        <div class="p-3 border-y-2 border-r-2 border-blue-400">
           <div data-hdl="posts-header">
-            <h2 class="text-green-500 text-xl font-bold">Posts</h2>
+            <UI.H2>Posts</UI.H2>
           </div>
         </div>
-        <div class="p-3 outline outline-1">
+        <div class="p-3 border-b-2 border-r-2 border-blue-400  h-96 overflow-scroll">
           <ul data-hdl="posts">
             {#for p <- @main_feed}
               <li>
-                <Forum.Post post={p} />
+                <Forum.Post post={p}>
+                  <Forum.PostThreadInfo />
+                </Forum.Post>
               </li>
             {/for}
           </ul>
         </div>
+        <div class="p-3 border-b-2 border-r-2 border-blue-400">
+          <TextArea class="w-full" />
+          <div class="flex flex-row justify-end items-end mt-3">
+            <UI.Button>></UI.Button>
+          </div>
+        </div>
       </div>
+
       {#if @selected_post}
         <Forum.Thread id="forum-thread" selected_post={@selected_post} />
       {/if}
