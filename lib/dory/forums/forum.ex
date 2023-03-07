@@ -3,11 +3,13 @@ defmodule Dory.Forums.Forum do
   import Ecto.Changeset
   alias Dory.Forums.ForumUser
   alias Dory.Accounts.User
+  alias Dory.Posts.Post
 
   schema "forums" do
     field :name, :string
     many_to_many :users, User, join_through: "forum_users"
     has_many :forum_users, ForumUser
+    has_many :posts, Post
     timestamps(updated_at: false)
   end
 
