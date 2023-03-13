@@ -21,7 +21,7 @@ defmodule Forum.Post do
       </div>
       <PostFrame>
         <div>
-          <div data-hdl="top" class="pb-3 flex flex-row">
+          <div data-hdl="top" class="pb-3">
             <div data-hdl="username">
               {@post.username}
             </div>

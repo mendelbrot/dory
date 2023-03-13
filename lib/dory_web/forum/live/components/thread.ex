@@ -1,16 +1,14 @@
 defmodule Forum.Thread do
-  use Surface.LiveComponent
+  use Surface.Component
   alias Surface.Components.Form.TextArea
 
+  prop thread_uri, :string, required: true
+  prop message_input_value, :string, default: ""
   prop selected_post_id, :string, default: nil
   prop posts, :list, default: []
   prop heading, :string, default: nil
 
   slot default
-
-  def mount(socket) do
-    {:ok, socket}
-  end
 
   def render(assigns) do
     ~F"""
@@ -38,9 +36,14 @@ defmodule Forum.Thread do
         </ul>
       </div>
       <div class="p-3 border-b-2 border-r-2 border-blue-400">
-        <TextArea class="w-full" />
+        <TextArea
+          class="w-full rounded-lg"
+          value={@message_input_value}
+          opts={"phx-value-id": @thread_uri}
+          keyup="message-input-keyup"
+        />
         <div class="flex flex-row justify-end items-end mt-3">
-          <UI.Button>></UI.Button>
+          <UI.Button value={@thread_uri} on_click="send-post">></UI.Button>
         </div>
       </div>
     </div>
