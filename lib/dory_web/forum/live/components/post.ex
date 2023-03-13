@@ -14,7 +14,7 @@ defmodule Forum.Post do
       class={if(@highlight, do: "bg-yellow-200", else: "") <> " flex flex-row p-3"}
       phx-click="select-post"
       phx-value-id={@post.id}
-      phx-value-ref_post_id={@post.ref_post_id}
+      phx-value-ref-id={@post.ref_id}
     >
       <div data-hdl="left" class="">
         <Profile.Icon src="https://cdn-icons-png.flaticon.com/128/3069/3069186.png" />
