@@ -1,7 +1,7 @@
 defmodule Dory.Posts do
   import Ecto.Query, warn: false
   alias Dory.Repo
-  alias Dory.Posts.Post
+  alias Dory.Forums.Post
 
   def create(attrs) do
     %Post{}

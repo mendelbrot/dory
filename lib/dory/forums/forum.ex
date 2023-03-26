@@ -1,9 +1,8 @@
 defmodule Dory.Forums.Forum do
   use Dory.Schema
   import Ecto.Changeset
-  alias Dory.Forums.ForumUser
+  alias Dory.Forums.{Post, ForumUser}
   alias Dory.Accounts.User
-  alias Dory.Posts.Post
 
   schema "forums" do
     field :name, :string
@@ -13,11 +12,11 @@ defmodule Dory.Forums.Forum do
     timestamps(updated_at: false)
   end
 
-  def create_changeset(forum, attrs, forum_users) do
+  def create_changeset(forum, attrs, forum_users \\ []) do
     forum
     |> cast(attrs, [:name])
-    |> put_assoc(:forum_users, forum_users)
     |> validate_required([:name])
+    |> put_assoc(:forum_users, forum_users)
     |> unique_constraint(:name)
   end
 

@@ -7,7 +7,6 @@ defmodule Dory.Repo.Migrations.CreateProfilesTable do
       add :user_id, references(:users, type: :uuid, on_delete: :delete_all)
       add :username, :citext, null: false
       add :icon, :string
-      add :icon_color, :string
       timestamps()
     end
 

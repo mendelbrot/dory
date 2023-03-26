@@ -27,7 +27,6 @@ defmodule DoryWeb.ForumLive do
   5. if a selected thread is also in the uri, also put the thread data in the socket
   6. if a selected post is also in the uri, also put the post data in the socket (the selected post will be highlighted.  a selected post requires a selected thread.)
   """
-
   def handle_params(
         params,
         _uri,
@@ -123,7 +122,8 @@ defmodule DoryWeb.ForumLive do
         thread_id: thread_id,
         thread_uri: thread_id && "/forum/#{forum_id}/thread/#{thread_id}",
         post_id: post_id,
-        post_uri: thread_id && post_id && "/forum/#{forum_id}/thread/#{thread_id}/post/#{post_id}",
+        post_uri:
+          thread_id && post_id && "/forum/#{forum_id}/thread/#{thread_id}/post/#{post_id}",
         main_feed: main_feed,
         thread: thread
       )
@@ -133,6 +133,7 @@ defmodule DoryWeb.ForumLive do
 
   def render(assigns) do
     IO.inspect(assigns)
+
     ~F"""
     <UI.H1>{@forum_name}</UI.H1>
     <div class="flex flex-row border-l-2 border-blue-400">

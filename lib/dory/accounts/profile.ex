@@ -6,7 +6,6 @@ defmodule Dory.Accounts.Profile do
   schema "profiles" do
     field :username, :string
     field :icon, :string
-    field :icon_color, :string
     belongs_to :user, User
     timestamps()
   end
@@ -17,7 +16,7 @@ defmodule Dory.Accounts.Profile do
   """
   def create_changeset(profile, attrs) do
     profile
-    |> cast(attrs, [:user_id, :username, :icon, :icon_color])
+    |> cast(attrs, [:user_id, :username, :icon])
     |> validate_required([:user_id, :username])
     |> unique_constraint(:user_id)
     |> unique_constraint(:username)
@@ -28,7 +27,7 @@ defmodule Dory.Accounts.Profile do
   """
   def update_changeset(profile, attrs) do
     profile
-    |> cast(attrs, [:username, :icon, :icon_color])
+    |> cast(attrs, [:username, :icon])
     |> unique_constraint(:username)
   end
 end

@@ -19,6 +19,6 @@ defmodule Dory.Repo.Migrations.CreateForumsTable do
 
     create index(:forum_users, [:forum_id])
     create index(:forum_users, [:user_id])
-    create unique_index(:forum_users, [:forum_id, :forum_id])
+    create unique_index(:forum_users, [:forum_id, :user_id])
   end
 end
