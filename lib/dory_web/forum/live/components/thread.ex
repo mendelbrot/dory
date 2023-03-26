@@ -4,7 +4,7 @@ defmodule Forum.Thread do
 
   prop thread_uri, :string, required: true
   prop message_input_value, :string, default: ""
-  prop selected_post_id, :string, default: nil
+  prop post_id, :string, default: nil
   prop posts, :list, default: []
   prop heading, :string, default: nil
 
@@ -23,7 +23,7 @@ defmodule Forum.Thread do
         <ul data-hdl="thread">
           {#for p <- @posts}
             <li>
-              <Forum.Post post={p} highlight={p.id == @selected_post_id}>
+              <Forum.Post post={p} highlight={p.id == @post_id}>
                 {#if Map.has_key?(p, :replies) && !Enum.empty?(p.replies)}
                   <Forum.PostThreadInfo
                     num_replies={length(p.replies)}

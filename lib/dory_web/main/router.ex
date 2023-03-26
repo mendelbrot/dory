@@ -24,6 +24,8 @@ defmodule DoryWeb.Router do
       on_mount: [{DoryWeb.UserAuth, :ensure_authenticated}] do
       live "/", HomepageLive
       live "/forum/:forum_id", ForumLive
+      live "/forum/:forum_id/thread/:thread_id", ForumLive
+      live "/forum/:forum_id/thread/:thread_id/post/:post_id", ForumLive
     end
   end
 
