@@ -2,6 +2,29 @@ defmodule DoryWeb.ForumLive do
   use DoryWeb, :surface_live_view
 
   @doc """
+  helper function to parse data from the uri of a forum, post or thread.
+
+  this is used in the "send-post" event handler because the uri passed into the
+  thread_uri prop of <Forum.Thread/> uniquely identifies the the target of the
+  text input data for a new post: if it will be starting a new thread, or a
+  reply to an existing thread_id.
+  """
+  def parse(uri) do
+    parts = String.split(uri, "/")
+
+    case parts do
+      ["forum", forum_id, "thread", thread_id, "post", post_id] ->
+        %{forum_id: forum_id, thread_id: thread_id, post_id: post_id}
+
+      ["forum", forum_id, "thread", thread_id] ->
+        %{forum_id: forum_id, thread_id: thread_id}
+
+      ["forum", forum_id] ->
+        %{forum_id: forum_id}
+    end
+  end
+
+  @doc """
   Initializes the messages in progress
 
   messages in progress (message_input_values):
@@ -22,7 +45,7 @@ defmodule DoryWeb.ForumLive do
   @doc """
   1. read the forum id, thread id and post id from the uri
   2. get the forum name
-  3. get the forum posts
+  3. get the forum main feed
   4. put the forum data in the socket
   5. if a selected thread is also in the uri, also put the thread data in the socket
   6. if a selected post is also in the uri, also put the post data in the socket (the selected post will be highlighted.  a selected post requires a selected thread.)
@@ -36,69 +59,20 @@ defmodule DoryWeb.ForumLive do
     thread_id = Map.get(params, "thread_id")
     post_id = Map.get(params, "post_id")
 
-    # TODO get forum name
-    # TODO get list of forum posts
+    %{name: forum_name} = Dory.Forums.get(forum_id)
 
-    forum_name = "Home"
-
-    posts = [
-      %{
-        id: "123",
-        user_id: "234",
-        forum_id: "999",
-        username: "abc",
-        user_icon: "/images/user_icons/123.png",
-        created_at: "2022-08-11 21:06:17+03",
-        updated_at: "2022-08-11 21:06:17+03",
-        ref_id: "123",
-        post_to_main_feed: true,
-        body: "hello 👋 this is a post 😃",
-        replies: [
-          %{
-            id: "545",
-            user_id: "1",
-            forum_id: "999",
-            username: "cba",
-            created_at: "2023-08-12 21:06:17+03",
-            updated_at: "2023-08-12 21:06:17+03",
-            ref_id: "123",
-            post_to_main_feed: true,
-            body: "🌠🚀 and 👾"
-          },
-          %{
-            id: "543",
-            user_id: "1",
-            forum_id: "999",
-            username: "cba",
-            created_at: "2023-08-11 21:06:17+03",
-            updated_at: "2023-08-11 21:06:17+03",
-            ref_id: "123",
-            post_to_main_feed: false,
-            body: "hi there.  this is neat. 💚"
-          }
-        ]
-      },
-      %{
-        id: "545",
-        user_id: "1",
-        forum_id: "999",
-        username: "cba",
-        created_at: "2023-08-12 21:06:17+03",
-        updated_at: "2023-08-12 21:06:17+03",
-        ref_id: "123",
-        post_to_main_feed: true,
-        body: "🌠🚀 and 👾",
-        replies: []
-      }
-    ]
+    threads = Dory.Feeds.forum_live_view_data(forum_id)
 
     main_feed =
-      posts
-      |> Enum.filter(fn p -> p.post_to_main_feed == true end)
-      |> Enum.sort(fn p1, p2 -> p1.created_at <= p2.created_at end)
-
-    # the first post of the thread is found by the ref_id of the selected post (and i'm calling ref_id thread_id)
-    thread_start_post = Enum.find(main_feed, fn p -> p.id == thread_id end)
+      threads
+      |> Enum.filter(fn thread ->
+        posts = Map.get(thread, :posts_vm)
+        not Enum.empty?(posts)
+      end)
+      |> Enum.map(fn thread ->
+        posts = Map.get(thread, :posts_vm)
+        Enum.at(posts, 0)
+      end)
 
     thread =
       case thread_id do
@@ -106,24 +80,20 @@ defmodule DoryWeb.ForumLive do
           nil
 
         _ ->
-          case Map.get(thread_start_post, :replies) do
-            # the replies are in a nested subfield of the first post.   they need to be appended to the thread instead.
-            # so after processing, the thread looks like this: [first post minus replies | first post replies].
-            [_ | _] -> [Map.delete(thread_start_post, :replies) | thread_start_post.replies]
-            _ -> [thread_start_post]
-          end
+          threads
+          |> Enum.find(fn t -> t.id == thread_id end)
+          |> Map.get(:posts_vm)
       end
 
     socket =
       assign(socket,
         forum_name: forum_name,
         forum_id: forum_id,
-        forum_uri: "/forum/#{forum_id}",
+        forum_uri: "forum/#{forum_id}",
         thread_id: thread_id,
-        thread_uri: thread_id && "/forum/#{forum_id}/thread/#{thread_id}",
+        thread_uri: thread_id && "forum/#{forum_id}/thread/#{thread_id}",
         post_id: post_id,
-        post_uri:
-          thread_id && post_id && "/forum/#{forum_id}/thread/#{thread_id}/post/#{post_id}",
+        post_uri: thread_id && post_id && "forum/#{forum_id}/thread/#{thread_id}/post/#{post_id}",
         main_feed: main_feed,
         thread: thread
       )
@@ -132,8 +102,6 @@ defmodule DoryWeb.ForumLive do
   end
 
   def render(assigns) do
-    IO.inspect(assigns)
-
     ~F"""
     <UI.H1>{@forum_name}</UI.H1>
     <div class="flex flex-row border-l-2 border-blue-400">
@@ -165,10 +133,10 @@ defmodule DoryWeb.ForumLive do
 
   def handle_event(
         "select-post",
-        %{"id" => post_id, "ref-id" => ref_id} = _value,
+        %{"id" => post_id, "thread-id" => thread_id} = _value,
         %{assigns: %{forum_id: forum_id}} = socket
       ) do
-    thread_uri = "/forum/#{forum_id}/thread/#{ref_id}/post/#{post_id}"
+    thread_uri = "/forum/#{forum_id}/thread/#{thread_id}/post/#{post_id}"
 
     socket = push_patch(socket, to: thread_uri)
 
@@ -199,13 +167,45 @@ defmodule DoryWeb.ForumLive do
   def handle_event(
         "send-post",
         %{"value" => thread_uri} = _value,
-        %{assigns: %{message_input_values: mivs}} = socket
+        %{
+          assigns: %{
+            message_input_values: mivs,
+            current_user: %{id: user_id}
+          }
+        } = socket
       ) do
     body = Map.get(mivs, thread_uri)
 
-    # TODO: create the post
-    IO.inspect(thread_uri)
-    IO.inspect(body)
+    uri_data = parse(thread_uri)
+    forum_id = Map.get(uri_data, :forum_id)
+    thread_id = Map.get(uri_data, :thread_id)
+
+    post_to_main_feed = thread_id == nil
+
+    thread =
+      thread_id &&
+        Enum.find(
+          socket.assigns.main_feed,
+          fn t -> t.id == thread_id end
+        )
+
+    posts = thread && Map.get(thread, :posts)
+    ref_id = posts && !Enum.empty?(posts) && Map.get(Enum.at(posts, 0), "id")
+
+    new_post =
+      Map.filter(
+        %{
+          user_id: user_id,
+          forum_id: forum_id,
+          thread_id: thread_id,
+          ref_id: ref_id,
+          post_to_main_feed: post_to_main_feed,
+          body: body
+        },
+        fn {_, v} -> v != nil end
+      )
+
+    Dory.Posts.create(new_post)
 
     socket =
       assign(socket,

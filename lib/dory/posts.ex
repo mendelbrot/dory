@@ -17,10 +17,11 @@ defmodule Dory.Posts do
 
   def get_posts_in_forum(forum_id) do
     query =
-      from p in Post,
+      from(p in Post,
         where: p.id == ^forum_id,
         preload: [:replies],
         select: p
+      )
 
     Repo.all(query)
   end

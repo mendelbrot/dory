@@ -1,7 +1,7 @@
 defmodule Dory.Forums.Forum do
   use Dory.Schema
   import Ecto.Changeset
-  alias Dory.Forums.{Post, ForumUser}
+  alias Dory.Forums.{Post, PostVM, ForumUser}
   alias Dory.Accounts.User
 
   schema "forums" do
@@ -9,6 +9,7 @@ defmodule Dory.Forums.Forum do
     many_to_many :users, User, join_through: "forum_users"
     has_many :forum_users, ForumUser
     has_many :posts, Post
+    has_many :posts_vm, PostVM
     timestamps(updated_at: false)
   end
 

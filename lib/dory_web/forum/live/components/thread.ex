@@ -2,13 +2,13 @@ defmodule Forum.Thread do
   use Surface.Component
   alias Surface.Components.Form.TextArea
 
-  prop thread_uri, :string, required: true
-  prop message_input_value, :string, default: ""
-  prop post_id, :string, default: nil
-  prop posts, :list, default: []
-  prop heading, :string, default: nil
+  prop(thread_uri, :string, required: true)
+  prop(message_input_value, :string, default: "")
+  prop(post_id, :string, default: nil)
+  prop(posts, :list, default: [])
+  prop(heading, :string, default: nil)
 
-  slot default
+  slot(default)
 
   def render(assigns) do
     ~F"""
@@ -24,10 +24,10 @@ defmodule Forum.Thread do
           {#for p <- @posts}
             <li>
               <Forum.Post post={p} highlight={p.id == @post_id}>
-                {#if Map.has_key?(p, :replies) && !Enum.empty?(p.replies)}
+                {#if Map.has_key?(p, :num_replies) and Map.has_key?(p, :last_reply)}
                   <Forum.PostThreadInfo
-                    num_replies={length(p.replies)}
-                    last_reply={List.last(p.replies).created_at}
+                    num_replies={p.num_replies}
+                    last_reply={p.last_reply}
                   />
                 {/if}
               </Forum.Post>
