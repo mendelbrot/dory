@@ -15,20 +15,6 @@ defmodule Dory.Forums.Post do
     timestamps()
   end
 
-  def maybe_create_thread(changeset) do
-    thread_id = get_change(changeset, :thread_id)
-
-    case thread_id do
-      nil ->
-        changeset
-
-      _ ->
-        forum_id = get_change(changeset, :thread_id)
-        thread = %Thread{forum_id: forum_id}
-        put_assoc(changeset, :thread, thread)
-    end
-  end
-
   @doc """
   - If the post id being added to a thread, just create the post.
   - If the post is starting a new thread, then create the thread and add the post as an association.

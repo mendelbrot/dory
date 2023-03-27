@@ -3,10 +3,25 @@ defmodule Dory.Posts do
   alias Dory.Repo
   alias Dory.Forums.Post
 
+  @topic "posts"
+
+  defp notify_subscribers({:ok, result}, event) do
+    Phoenix.PubSub.broadcast(
+      Dory.PubSub,
+      @topic <> ":#{result.forum_id}",
+      {event, result.id}
+    )
+
+    {:ok, result}
+  end
+
+  defp notify_subscribers({:error, reason}, _), do: {:error, reason}
+
   def create(attrs) do
     %Post{}
     |> Post.create_changeset(attrs)
     |> Repo.insert()
+    |> notify_subscribers(:created)
   end
 
   def update(%Post{} = post, attrs) do

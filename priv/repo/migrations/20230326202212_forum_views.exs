@@ -13,7 +13,7 @@ defmodule Dory.Repo.Migrations.ForumViews do
         profiles pr
       on
         p.user_id = pr.user_id
-      order by p.inserted_at desc;
+      order by p.inserted_at asc;
     """
   end
 end

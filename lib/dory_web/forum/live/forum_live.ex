@@ -25,14 +25,18 @@ defmodule DoryWeb.ForumLive do
   end
 
   @doc """
-  Initializes the messages in progress
+  - Initializes the messages in progress
+  - subscribe to posts:forum_id topic
 
   messages in progress (message_input_values):
   - text that was entered into a textarea but not yet sent.
   - they are saved in a map so that if the user leaves a thread and comes back they will not loose their text. (as long as they don't navigate away from forum the page)
   """
-  def mount(_params, _session, socket) do
+  def mount(%{"forum_id" => forum_id} = params, _session, socket) do
     message_input_values = %{}
+
+    topic = "posts" <> ":#{forum_id}"
+    if connected?(socket), do: Phoenix.PubSub.subscribe(Dory.PubSub, topic)
 
     socket =
       assign(socket,
@@ -52,7 +56,7 @@ defmodule DoryWeb.ForumLive do
   """
   def handle_params(
         params,
-        _uri,
+        uri,
         socket
       ) do
     forum_id = Map.get(params, "forum_id")
@@ -87,6 +91,7 @@ defmodule DoryWeb.ForumLive do
 
     socket =
       assign(socket,
+        uri: "/forum" <> List.last(String.split(uri, "/forum")),
         forum_name: forum_name,
         forum_id: forum_id,
         forum_uri: "forum/#{forum_id}",
@@ -98,6 +103,14 @@ defmodule DoryWeb.ForumLive do
         thread: thread
       )
 
+    {:noreply, socket}
+  end
+
+  @doc """
+  if it receives any message, simply rerender all to get the latest data
+  """
+  def handle_info(_, socket) do
+    socket = push_patch(socket, to: socket.assigns.uri)
     {:noreply, socket}
   end
 
